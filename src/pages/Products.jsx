@@ -6,40 +6,39 @@ export default function Products() {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [category, setCategory] = useState("");
+  const [search, setSearch] = useState("");
 
   useEffect(() => {
     setLoading(true);
-
-    getProducts(category)
+    getProducts({ category, name: search })
       .then((res) => setProducts(res.data))
       .catch(console.error)
       .finally(() => setLoading(false));
-  }, [category]);
-
-  if (loading) return <p>Cargando productos...</p>;
+  }, [category, search]);
 
   return (
     <div style={{ padding: "20px" }}>
       <h1>Productos</h1>
 
-      {/*  FILTRO POR CATEGORÍA */}
-      <select
-        value={category}
-        onChange={(e) => setCategory(e.target.value)}
-        style={{ marginBottom: "20px" }}
-      >
-        <option value="">Todas las categorías</option>
-        <option value="smartphones">Smartphones</option>
-        <option value="audio">Audio</option>
-        <option value="computadoras">Computadoras</option>
-        <option value="tecnologia">Tecnología</option>
-      </select>
+      {/*  Buscador */}
+      <input
+        type="text"
+        placeholder="Buscar producto..."
+        value={search}
+        onChange={(e) => setSearch(e.target.value)}
+        style={{ marginBottom: "20px", padding: "8px", width: "300px" }}
+      />
 
-      {/*  LISTADO DE PRODUCTOS */}
+      {loading && <p>Cargando productos...</p>}
+
+      {!loading && products.length === 0 && (
+        <p>No se encontraron productos</p>
+      )}
+
       {products.map((p) => (
         <div key={p.id} style={{ marginBottom: "20px" }}>
           <h3>
-            <Link to={`/products/${p.slug}`}>{p.name}</Link>
+            <Link to={`/product/${p.slug}`}>{p.name}</Link>
           </h3>
           <p>{p.description}</p>
           <strong>S/ {p.price}</strong>

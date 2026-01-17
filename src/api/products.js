@@ -1,14 +1,14 @@
-const API_URL = "https://ecommerce-mvp-1eo3.onrender.com";
+const API_URL = import.meta.env.VITE_API_URL;
 
-export async function getProducts(category) {
-  const url = category
-    ? `${API_URL}/products?category=${category}`
-    : `${API_URL}/products`;
+export async function getProducts({ category = "", name = "" } = {}) {
+  const params = new URLSearchParams();
 
-  const res = await fetch(url);
+  if (category) params.append("category", category);
+  if (name) params.append("name", name);
+
+  const res = await fetch(`${API_URL}/products?${params.toString()}`);
 
   if (!res.ok) throw new Error("Error al obtener productos");
-
   return res.json();
 }
 
