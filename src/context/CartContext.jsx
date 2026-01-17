@@ -1,18 +1,12 @@
-import { createContext, useContext, useEffect, useState } from "react";
+import { createContext, useContext, useState } from "react";
 
 const CartContext = createContext();
 
 export function CartProvider({ children }) {
-  const [cart, setCart] = useState(() => {
-    const stored = localStorage.getItem("cart");
-    return stored ? JSON.parse(stored) : [];
-  });
+  const [cart, setCart] = useState([]);
 
-  useEffect(() => {
-    localStorage.setItem("cart", JSON.stringify(cart));
-  }, [cart]);
-
-  function addToCart(product) {
+  // ➕ Agregar producto
+  const addToCart = (product) => {
     setCart((prev) => {
       const exists = prev.find((p) => p.id === product.id);
       if (exists) {
@@ -24,21 +18,24 @@ export function CartProvider({ children }) {
       }
       return [...prev, { ...product, quantity: 1 }];
     });
-  }
+  };
 
-  function removeFromCart(id) {
+  // ➖ Quitar producto
+  const removeFromCart = (id) => {
     setCart((prev) => prev.filter((p) => p.id !== id));
-  }
+  };
 
-  function increase(id) {
+  // 🔼 Incrementar
+  const increase = (id) => {
     setCart((prev) =>
       prev.map((p) =>
         p.id === id ? { ...p, quantity: p.quantity + 1 } : p
       )
     );
-  }
+  };
 
-  function decrease(id) {
+  // 🔽 Decrementar
+  const decrease = (id) => {
     setCart((prev) =>
       prev
         .map((p) =>
@@ -46,17 +43,20 @@ export function CartProvider({ children }) {
         )
         .filter((p) => p.quantity > 0)
     );
-  }
+  };
+
+  const total = cart.reduce(
+    (sum, p) => sum + p.price * p.quantity,
+    0
+  );
 
   return (
     <CartContext.Provider
-      value={{ cart, addToCart, removeFromCart, increase, decrease }}
+      value={{ cart, addToCart, removeFromCart, increase, decrease, total }}
     >
       {children}
     </CartContext.Provider>
   );
 }
 
-export function useCart() {
-  return useContext(CartContext);
-}
+export const useCart = () => useContext(CartContext);

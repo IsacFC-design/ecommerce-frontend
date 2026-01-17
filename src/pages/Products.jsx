@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
 import { getProducts } from "../api/products";
 import { Link } from "react-router-dom";
+import Cart from "../components/Cart";
+
 
 export default function Products() {
   const [products, setProducts] = useState([]);
@@ -27,6 +29,8 @@ export default function Products() {
   return (
     <div style={{ padding: "20px" }}>
       <h1>Productos</h1>
+
+      <Cart />
 
       {/*  Buscador */}
       <input
