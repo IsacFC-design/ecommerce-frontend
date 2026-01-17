@@ -2,13 +2,15 @@ import { useEffect, useState } from "react";
 import { getProducts } from "../api/products";
 import { Link } from "react-router-dom";
 import Cart from "../components/Cart";
-
+import { useCart } from "../context/CartContext";
 
 export default function Products() {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [category, setCategory] = useState("");
   const [search, setSearch] = useState("");
+  const { cart } = useCart();
+
 
   useEffect(() => {
     setLoading(true);
@@ -28,6 +30,10 @@ export default function Products() {
 
   return (
     <div style={{ padding: "20px" }}>
+
+      <Link to="/checkout">
+        🛒 Carrito ({cart.length})
+      </Link>
       <h1>Productos</h1>
 
       <Cart />
