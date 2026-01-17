@@ -4,12 +4,12 @@ import ProductDetail from "./pages/ProductDetail";
 
 function App() {
   return (
-    <BrowserRouter>
+
       <Routes>
         <Route path="/" element={<Products />} />
         <Route path="/products/:slug" element={<ProductDetail />} />
       </Routes>
-    </BrowserRouter>
+
   );
 }
 
