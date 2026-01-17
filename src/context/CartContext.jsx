@@ -1,9 +1,18 @@
-import { createContext, useContext, useState } from "react";
+import { createContext, useContext, useEffect, useState } from "react";
 
 const CartContext = createContext();
 
 export function CartProvider({ children }) {
-  const [cart, setCart] = useState([]);
+  //  Cargar carrito desde localStorage
+  const [cart, setCart] = useState(() => {
+    const stored = localStorage.getItem("cart");
+    return stored ? JSON.parse(stored) : [];
+  });
+
+  //  Guardar carrito cada vez que cambia
+  useEffect(() => {
+    localStorage.setItem("cart", JSON.stringify(cart));
+  }, [cart]);
 
   // ➕ Agregar producto
   const addToCart = (product) => {
@@ -20,7 +29,7 @@ export function CartProvider({ children }) {
     });
   };
 
-  // ➖ Quitar producto
+  // ❌ Eliminar producto
   const removeFromCart = (id) => {
     setCart((prev) => prev.filter((p) => p.id !== id));
   };
@@ -45,6 +54,7 @@ export function CartProvider({ children }) {
     );
   };
 
+  // 💰 Total
   const total = cart.reduce(
     (sum, p) => sum + p.price * p.quantity,
     0
@@ -52,7 +62,14 @@ export function CartProvider({ children }) {
 
   return (
     <CartContext.Provider
-      value={{ cart, addToCart, removeFromCart, increase, decrease, total }}
+      value={{
+        cart,
+        addToCart,
+        removeFromCart,
+        increase,
+        decrease,
+        total,
+      }}
     >
       {children}
     </CartContext.Provider>
