@@ -10,10 +10,18 @@ export default function Products() {
 
   useEffect(() => {
     setLoading(true);
-    getProducts({ category, name: search })
-      .then((res) => setProducts(res.data))
-      .catch(console.error)
+
+    getProducts(category, search)
+      .then((res) => {
+        console.log("API RESPONSE:", res); 
+        setProducts(res.data);
+      })
+      .catch((err) => {
+        console.error("Error al cargar productos:", err);
+        setProducts([]);
+      })
       .finally(() => setLoading(false));
+
   }, [category, search]);
 
   return (
