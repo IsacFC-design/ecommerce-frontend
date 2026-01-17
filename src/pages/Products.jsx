@@ -38,7 +38,7 @@ export default function Products() {
       {products.map((p) => (
         <div key={p.id} style={{ marginBottom: "20px" }}>
           <h3>
-            <Link to={`/product/${p.slug}`}>{p.name}</Link>
+            <Link to={`/products/${p.slug}`}>{p.name}</Link>
           </h3>
           <p>{p.description}</p>
           <strong>S/ {p.price}</strong>
