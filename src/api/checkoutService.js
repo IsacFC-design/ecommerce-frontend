@@ -1,6 +1,6 @@
 export async function createCheckoutSession(payload) {
   const response = await fetch(
-    "https://ecommerce-mvp-1.onrender.com/checkout/create-session",
+    "https://ecommerce-mvp-api.onrender.com/checkout/create-session",
     {
       method: "POST",
       headers: {
